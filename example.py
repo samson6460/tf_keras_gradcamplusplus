@@ -7,7 +7,7 @@ model = vgg16_mura_model('model_weights/VGG16_MURA.h5')
 model.summary()
 
 # %%
-img_path = 'images/patient01347_study1_negative_image2.png'
+img_path = 'images/4320878114_30a836d428_z.jpg'
 img = preprocess_image(img_path)
 
 # %% result of grad cam
