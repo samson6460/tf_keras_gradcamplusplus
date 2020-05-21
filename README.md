@@ -8,7 +8,7 @@ Grad-CAM++: Generalized Gradient-based Visual Explanations for Deep Convolutiona
 Adapted and optimized code from https://github.com/totti0223/gradcamplusplus.
 
 # Description
-It resolve the problem of using eager mode in tf.keras, and almost follow the formula in grad-cam++ paper.
+Resolve the problem of using eager mode in tf.keras, and almost follow the formula in grad-cam++ paper.
 
 # Results
 ![result](https://i.imgur.com/FjmSw3g.jpg)
@@ -30,7 +30,7 @@ Here's an example model that can classify bone X-rays into three categories: wri
 
 The model was pretrained by imagenet and finetuned by **MURA** dataset.
 
-Get the model by calling `vgg16_mura_model(destination_path)`, if it is the first time it will download the weights automatically.
+Get the model by calling `vgg16_mura_model(destination_path)`.If it's the first time it will download the weights automatically.
 
 Get the MURA(musculoskeletal radiographs) dataset from https://stanfordmlgroup.github.io/competitions/mura/.
 
