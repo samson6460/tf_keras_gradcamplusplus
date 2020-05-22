@@ -6,6 +6,19 @@ from tensorflow.keras.preprocessing import image
 from tensorflow.keras import Model
 
 def grad_cam(model, img, layer_name="block5_conv3", label_name=None, category_id=None):
+    """
+    get a heatmap by Grad-CAM.
+
+    Parameters:
+        model: model object, build from tf.keras 2.X.
+        img:   image array.
+        layer_name:  string, layer name in model.
+        label_name:  list, show the label name by assign this para, it should be a list of all label names.
+        category_id: int, index of the class. default is the category with the highest score in the prediction. 
+
+    Return:
+        heatmap array(without color).
+    """
     img_tensor = np.expand_dims(img, axis=0)
 
     conv_layer = model.get_layer(layer_name)
@@ -13,7 +26,7 @@ def grad_cam(model, img, layer_name="block5_conv3", label_name=None, category_id
 
     with tf.GradientTape() as gtape:
         conv_output, predictions = heatmap_model(img_tensor)
-        if not category_id:
+        if category_id==None:
             category_id = np.argmax(predictions[0])
         if label_name:
             print(label_name[category_id])
@@ -31,6 +44,19 @@ def grad_cam(model, img, layer_name="block5_conv3", label_name=None, category_id
     return np.squeeze(heatmap)
 
 def grad_cam_plus(model, img, layer_name="block5_conv3", label_name=None, category_id=None):
+    """
+    get a heatmap by Grad-CAM.
+
+    Parameters:
+        model: model object, build from tf.keras 2.X.
+        img:   image array.
+        layer_name:  string, layer name in model.
+        label_name:  list, show the label name by assign this para, it should be a list of all label names.
+        category_id: int, index of the class. default is the category with the highest score in the prediction. 
+
+    Return:
+        heatmap array(without color).
+    """
     img_tensor = np.expand_dims(img, axis=0)
 
     conv_layer = model.get_layer(layer_name)
@@ -40,7 +66,7 @@ def grad_cam_plus(model, img, layer_name="block5_conv3", label_name=None, catego
         with tf.GradientTape() as gtape2:
             with tf.GradientTape() as gtape3:
                 conv_output, predictions = heatmap_model(img_tensor)
-                if not category_id:
+                if category_id==None:
                     category_id = np.argmax(predictions[0])
                 if label_name:
                     print(label_name[category_id])

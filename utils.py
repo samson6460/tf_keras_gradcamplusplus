@@ -8,6 +8,9 @@ from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing import image
 # %%
 def download_file_from_google_drive(id, destination):
+    """
+    source: https://stackoverflow.com/questions/25010369/wget-curl-large-file-from-google-drive).
+    """
     def get_confirm_token(response):
         for key, value in response.cookies.items():
             if key.startswith('download_warning'):
@@ -37,6 +40,15 @@ def download_file_from_google_drive(id, destination):
     save_response_content(response, destination) 
 
 def vgg16_mura_model(path):
+    """
+    get a vgg16 model can classify bone X-rays into three categories: wrist, shoulder and elbow.
+
+    Parameters:
+        path:  string, if there's no model in the path, it will download the weights automatically.
+
+    Return:
+        model object.
+    """
     model_path = path
     if os.path.exists(model_path):
         model = load_model(model_path)
@@ -49,6 +61,15 @@ def vgg16_mura_model(path):
     return model
 
 def preprocess_image(img_path, target_size=(224, 224)):
+    """
+    preprocess the image by reshape and normalization.
+
+    Parameters:
+        img_path:  string.
+        target_size: tuple, reshape to this size.
+    Return:
+        image array.
+    """
     img = image.load_img(img_path, target_size=target_size)
     img = image.img_to_array(img)
     img /= 255
@@ -57,7 +78,18 @@ def preprocess_image(img_path, target_size=(224, 224)):
 
 # %%
 def show_imgwithheat(img_path, heatmap, alpha=0.4, return_array=False):
-    img = cv2.imread(img_path)
+    """
+    show the image with heatmap.
+
+    Parameters:
+        img_path: string.
+        heatmap:  image array, get it by calling grad_cam().
+        alpha:    float, transparency of heatmap.
+        return_array: bool, return a superimposed image array or not.
+    Return:
+        None or image array.
+    """
+    img = cv2.imdecode(np.fromfile(img_path, dtype=np.uint8),-1)
     heatmap = cv2.resize(heatmap, (img.shape[1], img.shape[0]))
     heatmap = (heatmap*255).astype('uint8')
     heatmap = cv2.applyColorMap(heatmap, cv2.COLORMAP_JET)
