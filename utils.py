@@ -89,7 +89,7 @@ def show_imgwithheat(img_path, heatmap, alpha=0.4, return_array=False):
     Return:
         None or image array.
     """
-    img = cv2.imdecode(np.fromfile(img_path, dtype=np.uint8),-1)
+    img = cv2.imread(img_path)
     heatmap = cv2.resize(heatmap, (img.shape[1], img.shape[0]))
     heatmap = (heatmap*255).astype('uint8')
     heatmap = cv2.applyColorMap(heatmap, cv2.COLORMAP_JET)

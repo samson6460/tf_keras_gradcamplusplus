@@ -1,14 +1,13 @@
 # %%
 from utils import vgg16_mura_model,preprocess_image,show_imgwithheat
 from gradcam import grad_cam,grad_cam_plus
-import os
 
 # %% load the model
-model = vgg16_mura_model(os.getcwd()+os.sep+'model_weights/VGG16_MURA.h5')
+model = vgg16_mura_model('model_weights/VGG16_MURA.h5')
 model.summary()
 
 # %%
-img_path = os.getcwd()+os.sep+'images/4320878114_30a836d428_z.jpg'
+img_path = 'images/4320878114_30a836d428_z.jpg'
 img = preprocess_image(img_path)
 
 # %% result of grad cam
