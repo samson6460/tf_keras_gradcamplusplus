@@ -1,3 +1,18 @@
+# Copyright 2020 Samson Woof
+
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+
+#     http://www.apache.org/licenses/LICENSE-2.0
+
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# ==============================================================================
+
 import numpy as np
 import cv2
 import tensorflow as tf
@@ -5,19 +20,24 @@ from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing import image
 from tensorflow.keras import Model
 
-def grad_cam(model, img, layer_name="block5_conv3", label_name=None, category_id=None):
-    """
-    get a heatmap by Grad-CAM.
 
-    Parameters:
-        model: model object, build from tf.keras 2.X.
-        img:   image array.
-        layer_name:  string, layer name in model.
-        label_name:  list, show the label name by assign this para, it should be a list of all label names.
-        category_id: int, index of the class. default is the category with the highest score in the prediction. 
+def grad_cam(model, img,
+             layer_name="block5_conv3", label_name=None,
+             category_id=None):
+    """Get a heatmap by Grad-CAM.
+
+    Ars:
+        model: A model object, build from tf.keras 2.X.
+        img: An image ndarray.
+        layer_name: A string, layer name in model.
+        label_name: A list,
+            show the label name by assign this argument,
+            it should be a list of all label names.
+        category_id: An integer, index of the class.
+            Default is the category with the highest score in the prediction.
 
     Return:
-        heatmap array(without color).
+        A heatmap ndarray(without color).
     """
     img_tensor = np.expand_dims(img, axis=0)
 
@@ -26,7 +46,7 @@ def grad_cam(model, img, layer_name="block5_conv3", label_name=None, category_id
 
     with tf.GradientTape() as gtape:
         conv_output, predictions = heatmap_model(img_tensor)
-        if category_id==None:
+        if category_id == None:
             category_id = np.argmax(predictions[0])
         if label_name:
             print(label_name[category_id])
@@ -43,19 +63,23 @@ def grad_cam(model, img, layer_name="block5_conv3", label_name=None, category_id
 
     return np.squeeze(heatmap)
 
-def grad_cam_plus(model, img, layer_name="block5_conv3", label_name=None, category_id=None):
-    """
-    get a heatmap by Grad-CAM.
+def grad_cam_plus(model, img,
+                  layer_name="block5_conv3", label_name=None,
+                  category_id=None):
+    """Get a heatmap by Grad-CAM.
 
-    Parameters:
-        model: model object, build from tf.keras 2.X.
-        img:   image array.
-        layer_name:  string, layer name in model.
-        label_name:  list, show the label name by assign this para, it should be a list of all label names.
-        category_id: int, index of the class. default is the category with the highest score in the prediction. 
+    Ars:
+        model: A model object, build from tf.keras 2.X.
+        img: An image ndarray.
+        layer_name: A string, layer name in model.
+        label_name: A list,
+            show the label name by assign this argument,
+            it should be a list of all label names.
+        category_id: An integer, index of the class.
+            Default is the category with the highest score in the prediction.
 
     Return:
-        heatmap array(without color).
+        A heatmap ndarray(without color).
     """
     img_tensor = np.expand_dims(img, axis=0)
 
@@ -75,7 +99,7 @@ def grad_cam_plus(model, img, layer_name="block5_conv3", label_name=None, catego
             conv_second_grad = gtape2.gradient(conv_first_grad, conv_output)
         conv_third_grad = gtape1.gradient(conv_second_grad, conv_output)
 
-    global_sum = np.sum(conv_output, axis=(0,1,2))
+    global_sum = np.sum(conv_output, axis=(0, 1, 2))
 
     alpha_num = conv_second_grad[0]
     alpha_denom = conv_second_grad[0]*2.0 + conv_third_grad[0]*global_sum
@@ -87,7 +111,7 @@ def grad_cam_plus(model, img, layer_name="block5_conv3", label_name=None, catego
 
     weights = np.maximum(conv_first_grad[0], 0.0)
 
-    deep_linearization_weights = np.sum(weights*alphas,axis=(0,1))
+    deep_linearization_weights = np.sum(weights*alphas, axis=(0,1))
     grad_CAM_map = np.sum(deep_linearization_weights*conv_output[0], axis=2)
 
     heatmap = np.maximum(grad_CAM_map, 0)
