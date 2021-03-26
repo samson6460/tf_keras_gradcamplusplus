@@ -61,7 +61,7 @@ def vgg16_mura_model(path):
     The model can classify bone X-rays into three categories:
     wrist, shoulder and elbow.
 
-    Ars:
+    Args:
         path: A string,
             if there's no model in the path,
             it will download the weights automatically.
@@ -82,10 +82,11 @@ def vgg16_mura_model(path):
 
     return model
 
+
 def preprocess_image(img_path, target_size=(224, 224)):
     """Preprocess the image by reshape and normalization.
 
-    Ars:
+    Args:
         img_path:  A string.
         target_size: A tuple, reshape to this size.
     Return:
@@ -101,7 +102,7 @@ def preprocess_image(img_path, target_size=(224, 224)):
 def show_imgwithheat(img_path, heatmap, alpha=0.4, return_array=False):
     """Show the image with heatmap.
 
-    Ars:
+    Args:
         img_path: string.
         heatmap:  image array, get it by calling grad_cam().
         alpha:    float, transparency of heatmap.
@@ -114,7 +115,7 @@ def show_imgwithheat(img_path, heatmap, alpha=0.4, return_array=False):
     heatmap = (heatmap*255).astype("uint8")
     heatmap = cv2.applyColorMap(heatmap, cv2.COLORMAP_JET)
     superimposed_img = heatmap * alpha + img
-    superimposed_img = np.clip(superimposed_img,0,255).astype("uint8")
+    superimposed_img = np.clip(superimposed_img, 0, 255).astype("uint8")
     superimposed_img = cv2.cvtColor(superimposed_img, cv2.COLOR_BGR2RGB)
 
     imgwithheat = Image.fromarray(superimposed_img)  

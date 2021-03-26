@@ -26,7 +26,7 @@ def grad_cam(model, img,
              category_id=None):
     """Get a heatmap by Grad-CAM.
 
-    Ars:
+    Args:
         model: A model object, build from tf.keras 2.X.
         img: An image ndarray.
         layer_name: A string, layer name in model.
@@ -68,7 +68,7 @@ def grad_cam_plus(model, img,
                   category_id=None):
     """Get a heatmap by Grad-CAM.
 
-    Ars:
+    Args:
         model: A model object, build from tf.keras 2.X.
         img: An image ndarray.
         layer_name: A string, layer name in model.
