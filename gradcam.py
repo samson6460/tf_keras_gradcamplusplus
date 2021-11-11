@@ -14,7 +14,6 @@
 # ==============================================================================
 
 import numpy as np
-import cv2
 import tensorflow as tf
 from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing import image
@@ -30,7 +29,7 @@ def grad_cam(model, img,
         model: A model object, build from tf.keras 2.X.
         img: An image ndarray.
         layer_name: A string, layer name in model.
-        label_name: A list,
+        label_name: A list or None,
             show the label name by assign this argument,
             it should be a list of all label names.
         category_id: An integer, index of the class.
@@ -66,13 +65,13 @@ def grad_cam(model, img,
 def grad_cam_plus(model, img,
                   layer_name="block5_conv3", label_name=None,
                   category_id=None):
-    """Get a heatmap by Grad-CAM.
+    """Get a heatmap by Grad-CAM++.
 
     Args:
         model: A model object, build from tf.keras 2.X.
         img: An image ndarray.
         layer_name: A string, layer name in model.
-        label_name: A list,
+        label_name: A list or None,
             show the label name by assign this argument,
             it should be a list of all label names.
         category_id: An integer, index of the class.

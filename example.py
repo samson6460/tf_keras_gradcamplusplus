@@ -15,7 +15,7 @@
 
 # %%
 from utils import vgg16_mura_model, preprocess_image, show_imgwithheat
-from gradcam import grad_cam,grad_cam_plus
+from gradcam import grad_cam, grad_cam_plus
 
 # %% load the model
 model = vgg16_mura_model('model_weights/VGG16_MURA.h5')

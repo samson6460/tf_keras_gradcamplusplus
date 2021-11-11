@@ -1,5 +1,8 @@
 # tf.keras-gradcamplusplus
-Grad-Cam and Grad-Cam++ implemented by tf.keras 2.X (tensorflow 2.X).
+
+![example](https://img.shields.io/badge/Python-3.x-blue.svg) ![example](https://img.shields.io/badge/Tensorflow-2.x-yellow.svg) ![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)
+
+Grad-Cam and Grad-Cam++ implemented in tf.keras 2.X (tensorflow 2.X).
 
 Grad-CAM: Visual Explanations from Deep Networks via Gradient-based Localization by Ramprasaath R. Selvaraju, Michael Cogswell, Abhishek Das, Ramakrishna Vedantam, Devi Parikh, Dhruv Batra (https://arxiv.org/abs/1610.02391).
 
@@ -28,7 +31,7 @@ cd tf.keras-gradcamplusplus
 # Example
 Here's an example model that can classify bone X-rays into three categories: wrist, shoulder and elbow based on VGG16.
 
-The model was pretrained by imagenet and finetuned by **MURA** dataset.
+The model was pretrained on ImageNet and finetuned on **MURA** dataset.
 
 Get the model by calling `vgg16_mura_model(destination_path)`.If it's the first time it will download the weights automatically.
 
@@ -37,7 +40,7 @@ Get the MURA(musculoskeletal radiographs) dataset from https://stanfordmlgroup.g
 Or test the model with no copyright images in [images](https://github.com/samson6460/tf.keras-gradcamplusplus/tree/master/images) folder.
 
 Images source:
-http://pixabay.com/
-https://visualhunt.com/
+- http://pixabay.com/
+- https://visualhunt.com/
 
-Run *example.py*, you will understand more.
+Run *example.py*, you will understand more.[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1pRlq73Wkd5np3mV-clZOhxmkdnGgpoec?usp=sharing)
