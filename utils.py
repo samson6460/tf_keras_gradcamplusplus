@@ -20,65 +20,27 @@ import numpy as np
 from PIL import Image
 from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing import image
+from tensorflow.keras.utils import get_file
 
 
-def _download_file_from_google_drive(id, destination):
-    """Source: 
-        https://stackoverflow.com/questions/25010369/wget-curl-large-file-from-google-drive).
-    """
-    def get_confirm_token(response):
-        for key, value in response.cookies.items():
-            if key.startswith("download_warning"):
-                return value
+WEIGHTS_PATH_VGG16_MURA = "https://github.com/samson6460/tf_keras_gradcamplusplus/releases/download/Weights/tf_keras_vgg16_mura_model.h5"
 
-        return None
-
-    def save_response_content(response, destination):
-        CHUNK_SIZE = 32768
-
-        with open(destination, "wb") as f:
-            for chunk in response.iter_content(CHUNK_SIZE):
-                if chunk: # filter out keep-alive new chunks
-                    f.write(chunk)
-
-    URL = "https://docs.google.com/uc?export=download"
-
-    session = requests.Session()
-
-    response = session.get(URL, params = {"id" : id}, stream = True)
-    token = get_confirm_token(response)
-
-    if token:
-        params = {"id" : id, "confirm" : token}
-        response = session.get(URL, params = params, stream = True)
-
-    save_response_content(response, destination) 
-
-
-def vgg16_mura_model(path):
+def vgg16_mura_model():
     """Get a vgg16 model.
 
     The model can classify bone X-rays into three categories:
     wrist, shoulder and elbow.
-
-    Args:
-        path: A string,
-            if there's no model in the path,
-            it will download the weights automatically.
+    It will download the weights automatically for the first time.
 
     Return:
         A tf.keras model object.
     """
-    model_path = path
-    if os.path.exists(model_path):
-        model = load_model(model_path)
-    else:
-        print("downloading the weights of model to", path, "...")
-        _download_file_from_google_drive(
-            "175QH-aIvlLvxrUGyCEpfQAQ5qiVfE_s5",
-            model_path)
-        print("done.")
-        model = load_model(model_path)
+    path_weights = get_file(
+        "tf_keras_vgg16_mura_model.h5",
+        WEIGHTS_PATH_VGG16_MURA,
+        cache_subdir="models")
+
+    model = load_model(path_weights)
 
     return model
 
@@ -87,10 +49,10 @@ def preprocess_image(img_path, target_size=(224, 224)):
     """Preprocess the image by reshape and normalization.
 
     Args:
-        img_path:  A string.
+        img_path: A string.
         target_size: A tuple, reshape to this size.
     Return:
-        An image ndarray.
+        An image array.
     """
     img = image.load_img(img_path, target_size=target_size)
     img = image.img_to_array(img)
@@ -104,8 +66,8 @@ def show_imgwithheat(img_path, heatmap, alpha=0.4, return_array=False):
 
     Args:
         img_path: string.
-        heatmap:  image array, get it by calling grad_cam().
-        alpha:    float, transparency of heatmap.
+        heatmap: image array, get it by calling grad_cam().
+        alpha: float, transparency of heatmap.
         return_array: bool, return a superimposed image array or not.
     Return:
         None or image array.
@@ -118,8 +80,11 @@ def show_imgwithheat(img_path, heatmap, alpha=0.4, return_array=False):
     superimposed_img = np.clip(superimposed_img, 0, 255).astype("uint8")
     superimposed_img = cv2.cvtColor(superimposed_img, cv2.COLOR_BGR2RGB)
 
-    imgwithheat = Image.fromarray(superimposed_img)  
-    display(imgwithheat)
+    imgwithheat = Image.fromarray(superimposed_img)
+    try:
+        display(imgwithheat)
+    except NameError:
+        imgwithheat.show()
 
     if return_array:
         return superimposed_img
